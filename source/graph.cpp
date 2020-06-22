@@ -22,15 +22,22 @@ void Node::disconnect(Node* rhs) {
 
 void Node::print(std::ostream& os, bool is_directed) const {
   std::string sep = is_directed ? "->" : "--";
-  os << "  ";  // indent nodes
-  os << "\"" << label_ << "\" " << sep << " {";
   auto it = adjacent_.begin();
   while (it != adjacent_.end()) {
-    os << "\"" << it->first->label_ << "\"";
-    if ((++it) != adjacent_.end())  // tailing commas bad
-      os << ", ";
+    os << "  ";  // indent
+
+    os << "\"" << label_ << "\" " << sep << " ";
+
+    os << "\"" << it->first->label_ << "\" ";
+    int w = it->second;
+    os << "[weight=" << w << ", penwidth=" << w << "];";
+
+    //if ((++it) != adjacent_.end())  // tailing commas bad
+    //  os << ", ";
+    os << "\n";
+    ++it;
   }
-  os << "};\n";
+  os << "\n";
 }
 
 /* MINHEAPNODE */
