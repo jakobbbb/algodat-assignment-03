@@ -73,7 +73,7 @@ class MinHeap {
 class Graph {
  private:
   bool is_directed_;
-  std::vector<Node> nodes_;
+  std::vector<Node*> nodes_;
   MinHeap* min_prio_queue_;
 
  public:
@@ -85,12 +85,12 @@ class Graph {
   /**
    * Add a node to the graph.
    */
-  void add(Node n);
+  void add(Node* n);
 
   /**
    * Remove a node from the graph.
    */
-  void remove(Node n);
+  void remove(Node* n);
 
   // TODO: implement Prim
   // TODO: implement Bellman-Ford

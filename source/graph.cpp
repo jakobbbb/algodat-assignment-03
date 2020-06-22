@@ -54,11 +54,11 @@ Graph::Graph(bool is_directed)
 
 Graph::~Graph() {}  // TODO
 
-void Graph::add(Node n) {
+void Graph::add(Node* n) {
   nodes_.push_back(n);
 }
 
-void Graph::remove(Node n) {
+void Graph::remove(Node* n) {
   for (auto it = nodes_.begin(); it != nodes_.end(); ++it) {
     if (n == *it) {
       nodes_.erase(it);
@@ -72,6 +72,6 @@ std::size_t Graph::size() const { return nodes_.size(); };
 void Graph::print(std::ostream& os) const {
   os << (is_directed_ ? "digraph" : "graph");
   os << " {\n";
-  for (auto const& n : nodes_) n.print(os, is_directed_);
+  for (auto const& n : nodes_) n->print(os, is_directed_);
   os << "}\n";
 }
