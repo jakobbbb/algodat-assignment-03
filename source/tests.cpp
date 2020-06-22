@@ -42,6 +42,8 @@ SCENARIO("print a graph", "[graph]") {
     auto bar = new Node{"bar", nullptr, 0};
     foo->connect(bar, 3);
     auto baz = new Node{"baz", nullptr, 0};
+    g.add(foo);
+    g.add(bar);
     g.add(baz);
     REQUIRE(3 == g.size());
     REQUIRE_NOTHROW(g.print(std::cout));
