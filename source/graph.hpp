@@ -34,6 +34,8 @@ class Node {
   void disconnect(Node* rhs);
 
   // TODO: implement methods for manipulating the parent and distance
+
+  void print(std::ostream& os) const;
 };
 
 class MinHeapNode {
@@ -70,9 +72,9 @@ class MinHeap {
 
 class Graph {
  private:
+  bool is_directed_;
   std::vector<Node> nodes_;
   MinHeap* min_prio_queue_;
-  bool is_directed_;
 
  public:
   Graph(bool is_directed);
@@ -92,8 +94,9 @@ class Graph {
 
   // TODO: implement Prim
   // TODO: implement Bellman-Ford
-  void print(std::ostream& os);
+
   // TODO: implement printGraph function that generates a file written using the
   // dot format
+  void print(std::ostream& os) const;
 };
 #endif  // GRAPH_HPP
