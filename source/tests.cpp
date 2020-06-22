@@ -4,7 +4,12 @@
 #include <vector>
 #include "graph.hpp"
 
-Graph make_graph(bool is_directed, int n_elements, float p) {
+/**
+ * Helper function to generate a graph of size `n_elements`, where each pair of
+ * elements has a chance `p` of being connected with a random weight between 1
+ * and max_weight.
+ */
+Graph make_graph(bool is_directed, int n_elements, int max_weight, float p) {
   std::srand(0);
   Graph g{is_directed};
   std::vector<Node*> nodes;
@@ -17,7 +22,8 @@ Graph make_graph(bool is_directed, int n_elements, float p) {
     for (auto m : nodes) {
       if (n == m) continue;
       if (std::rand() < RAND_MAX * p) {
-        n->connect(m, (std::rand() % 14) + 1);
+        int weight = (std::rand() % (max_weight - 1)) + 1;
+        n->connect(m, weight);
       }
     }
   }
@@ -50,7 +56,7 @@ SCENARIO("print a graph", "[graph]") {
   }
   GIVEN("a large graph") {
     const int size = 200;
-    auto g = make_graph(false, size, 0.01f);
+    auto g = make_graph(false, size, 15, 0.01f);
     REQUIRE(size == g.size());
     REQUIRE_NOTHROW(g.print(std::cout));
   }
