@@ -1,6 +1,9 @@
-# cpp-template
+# Algorithms and Data Structure Assignment 03
 
-Template repoisitory for a C++ project with `cmake` and `catch2`.
+Third assignment for AlgoDat, Summer Semester 2020.
+
+Task:  Implement a **graph** and the **Prim** and **Bellman-Ford**
+algorithms.
 
 ## building
 ```sh

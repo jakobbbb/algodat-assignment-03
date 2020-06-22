@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
-project(Helloworld)
+project(AlgoDat03)
 
 if(("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     OR ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
