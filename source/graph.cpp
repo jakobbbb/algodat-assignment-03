@@ -34,10 +34,9 @@ void Node::print(std::ostream& os, bool is_directed) const {
 
 /* MINHEAPNODE */
 
-
 /* MINHEAP */
 
-MinHeap::MinHeap() {} // TODO
+MinHeap::MinHeap() {}  // TODO
 
 /* GRAPH */
 
@@ -59,11 +58,14 @@ void Graph::remove(Node* n) {
   }
 }
 
-std::size_t Graph::size() const { return nodes_.size(); };
+std::size_t Graph::size() const {
+  return nodes_.size();
+};
 
 void Graph::print(std::ostream& os) const {
   os << (is_directed_ ? "digraph" : "graph");
   os << " {\n";
-  for (auto const& n : nodes_) n->print(os, is_directed_);
+  for (auto const& n : nodes_)
+    n->print(os, is_directed_);
   os << "}\n";
 }

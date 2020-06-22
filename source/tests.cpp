@@ -14,13 +14,14 @@ Graph make_graph(bool is_directed, int n_elements, int max_weight, float p) {
   Graph g{is_directed};
   std::vector<Node*> nodes;
   for (int i = 0; i < n_elements; ++i) {
-      auto n = new Node{"n" + std::to_string(i), nullptr, i};
-      g.add(n);
-      nodes.push_back(n);
+    auto n = new Node{"n" + std::to_string(i), nullptr, i};
+    g.add(n);
+    nodes.push_back(n);
   }
   for (auto n : nodes) {
     for (auto m : nodes) {
-      if (n == m) continue;
+      if (n == m)
+        continue;
       if (std::rand() < RAND_MAX * p) {
         int weight = (std::rand() % (max_weight - 1)) + 1;
         n->connect(m, weight);
