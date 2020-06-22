@@ -11,7 +11,7 @@ class Node {
  private:
   /* data */
   std::string label_;
-  std::map<Node, int> adjacent_;  // the int is for the weight od the egde
+  std::map<Node*, int> adjacent_;  // ptr to adjacent node -> weight
   Node* parent_;
   int distance_;  // aka key
 
@@ -21,10 +21,12 @@ class Node {
 
   // TODO: implement additional constructors?
 
+  bool operator==(Node const& rhs) const;
+
   /**
    * Add a connection between this node and another.
    */
-  void connect(Node* rhs);
+  void connect(Node* rhs, int weight);
 
   /**
    * Remove connection between this node and another.
@@ -81,12 +83,12 @@ class Graph {
   /**
    * Add a node to the graph.
    */
-  void add(Node* n);
+  void add(Node n);
 
   /**
    * Remove a node from the graph.
    */
-  void remove(Node* n);
+  void remove(Node n);
 
   // TODO: implement Prim
   // TODO: implement Bellman-Ford
