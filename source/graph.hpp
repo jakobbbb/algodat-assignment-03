@@ -10,10 +10,10 @@
 class Node {
  private:
   /* data */
-  std::string label;
-  std::map<Node, int> adjacentNodes;  // the int is for the weight od the egde
-  Node* parent;
-  int distance;  // aka key
+  std::string label_;
+  std::map<Node, int> adjacent_;  // the int is for the weight od the egde
+  Node* parent_;
+  int distance_;  // aka key
 
  public:
   Node(std::string label, Node* parent, int distance);
@@ -37,10 +37,10 @@ class Node {
 class MinHeapNode {
  private:
   /* data */
-  Node* node;
-  MinHeapNode* parent;
-  MinHeapNode* left;
-  MinHeapNode* right;
+  Node* node_;
+  MinHeapNode* parent_;
+  MinHeapNode* left_;
+  MinHeapNode* right_;
 
  public:
   MinHeapNode(Node* node,
@@ -54,7 +54,7 @@ class MinHeapNode {
 
 class MinHeap {
  private:
-  MinHeapNode* root;
+  MinHeapNode* root_;
 
  public:
   MinHeap(/* args */);
@@ -68,12 +68,12 @@ class MinHeap {
 
 class Graph {
  private:
-  std::vector<Node> nodes;
-  MinHeap* minPriorityQueue;
-  bool isDirected;
+  std::vector<Node> nodes_;
+  MinHeap* min_prio_queue_;
+  bool is_directed_;
 
  public:
-  Graph(bool isDirected);
+  Graph(bool is_directed);
   ~Graph();
 
   // TODO: implement additional constructors
