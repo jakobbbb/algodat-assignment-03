@@ -20,11 +20,15 @@ void Node::disconnect(Node* rhs) {
   adjacent_.erase(rhs);
 }
 
-void Node::print(std::ostream& os) const {
+void Node::print(std::ostream& os, bool is_directed) const {
+  std::string sep = is_directed ? "->" : "--";
   os << "  ";  // indent nodes
-  os << "\"" << label_ << "\" -> {";
-  for (auto adj : adjacent_) {
-    os << "\"" << adj.first->label_ << "\", ";
+  os << "\"" << label_ << "\" " << sep << " {";
+  auto it = adjacent_.begin();
+  while (it != adjacent_.end()) {
+    os << "\"" << it->first->label_ << "\"";
+    if ((++it) != adjacent_.end())  // tailing commas bad
+      os << ", ";
   }
   os << "};\n";
 }
@@ -56,9 +60,11 @@ void Graph::remove(Node n) {
   }
 }
 
+std::size_t Graph::size() const { return nodes_.size(); };
+
 void Graph::print(std::ostream& os) const {
   os << (is_directed_ ? "digraph" : "graph");
-  os << "{\n";
-  for (auto const& n : nodes_) n.print(os);
+  os << " {\n";
+  for (auto const& n : nodes_) n.print(os, is_directed_);
   os << "}\n";
 }

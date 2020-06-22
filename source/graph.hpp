@@ -35,7 +35,7 @@ class Node {
 
   // TODO: implement methods for manipulating the parent and distance
 
-  void print(std::ostream& os) const;
+  void print(std::ostream& os, bool is_directed) const;
 };
 
 class MinHeapNode {
@@ -98,5 +98,7 @@ class Graph {
   // TODO: implement printGraph function that generates a file written using the
   // dot format
   void print(std::ostream& os) const;
+
+  std::size_t size() const;
 };
 #endif  // GRAPH_HPP
