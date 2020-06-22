@@ -1,4 +1,4 @@
-# Algorithms and Data Structure Assignment 03
+# Algorithms and Data Structures Assignment 03
 
 Third assignment for AlgoDat, Summer Semester 2020.
 
