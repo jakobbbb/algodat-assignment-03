@@ -1,5 +1,6 @@
 add_executable(tests
     tests.cpp
+    graph.cpp
     )
 
 # generate compile_commands.json
