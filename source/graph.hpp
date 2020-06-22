@@ -1,3 +1,6 @@
+#ifndef GRAPH_HPP
+#define GRAPH_HPP
+
 #include <map>
 #include <string>
 #include <vector>
@@ -91,3 +94,4 @@ class Graph {
   // TODO: implement printGraph function that generates a file written using the
   // dot format
 };
+#endif  // GRAPH_HPP
