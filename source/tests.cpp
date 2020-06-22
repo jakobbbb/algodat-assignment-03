@@ -1,7 +1,28 @@
 #define CATCH_CONFIG_MAIN
 #include <catch2/catch.hpp>
 #include <iostream>
+#include <vector>
 #include "graph.hpp"
+
+Graph make_graph(bool is_directed, int n_elements, float p) {
+  std::srand(0);
+  Graph g{is_directed};
+  std::vector<Node*> nodes;
+  for (int i = 0; i < n_elements; ++i) {
+      auto n = new Node{"n" + std::to_string(i), nullptr, i};
+      g.add(n);
+      nodes.push_back(n);
+  }
+  for (auto n : nodes) {
+    for (auto m : nodes) {
+      if (n == m) continue;
+      if (std::rand() < RAND_MAX * p) {
+        n->connect(m, (std::rand() % 14) + 1);
+      }
+    }
+  }
+  return g;
+}
 
 SCENARIO("print a graph", "[graph]") {
   GIVEN("an empty graph") {
@@ -23,6 +44,12 @@ SCENARIO("print a graph", "[graph]") {
     auto baz = new Node{"baz", nullptr, 0};
     g.add(baz);
     REQUIRE(3 == g.size());
+    REQUIRE_NOTHROW(g.print(std::cout));
+  }
+  GIVEN("a large graph") {
+    const int size = 200;
+    auto g = make_graph(false, size, 0.01f);
+    REQUIRE(size == g.size());
     REQUIRE_NOTHROW(g.print(std::cout));
   }
 
