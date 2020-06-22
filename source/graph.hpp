@@ -13,12 +13,21 @@ class Node {
   int distance;  // aka key
 
  public:
-  Node(/* args */);
+  Node(std::string label, Node* parent, int distance);
   ~Node();
 
-  // TODO: implement additional constructors
-  // TODO: implement method for adding a connection
-  // TODO: implement method for removing a connection
+  // TODO: implement additional constructors?
+
+  /**
+   * Add a connection between this node and another.
+   */
+  void connect(Node* rhs);
+
+  /**
+   * Remove connection between this node and another.
+   */
+  void disconnect(Node* rhs);
+
   // TODO: implement methods for manipulating the parent and distance
 };
 
@@ -31,7 +40,10 @@ class MinHeapNode {
   MinHeapNode* right;
 
  public:
-  MinHeapNode(/* args */);
+  MinHeapNode(Node* node,
+              MinHeapNode* parent,
+              MinHeapNode* left,
+              MinHeapNode* right);
   ~MinHeapNode();
 
   // TODO: implement additional constructors
@@ -45,8 +57,10 @@ class MinHeap {
   MinHeap(/* args */);
   ~MinHeap();
   // TODO: implement method for restructuring the min-priority Queue
+  void restructure_queue();
   // TODO: implement method for extracting the smaller element from the
   // min-priority Queue
+  MinHeapNode* smallest();
 };
 
 class Graph {
@@ -56,14 +70,24 @@ class Graph {
   bool isDirected;
 
  public:
-  Graph(/* args */);
+  Graph(bool isDirected);
   ~Graph();
 
   // TODO: implement additional constructors
-  // TODO: implement method for adding a node
-  // TODO: implement method for removing a node
+
+  /**
+   * Add a node to the graph.
+   */
+  void add(Node* n);
+
+  /**
+   * Remove a node from the graph.
+   */
+  void remove(Node* n);
+
   // TODO: implement Prim
   // TODO: implement Bellman-Ford
+  void print(std::ostream& os);
   // TODO: implement printGraph function that generates a file written using the
   // dot format
 };
