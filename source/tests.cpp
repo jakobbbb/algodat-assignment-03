@@ -14,7 +14,7 @@ Graph make_graph(bool is_directed, int n_elements, int max_weight, float p) {
   Graph g{is_directed};
   std::vector<Node*> nodes;
   for (int i = 0; i < n_elements; ++i) {
-    Node n{"n" + std::to_string(i), nullptr, i};
+    Node n{"n" + std::to_string(i)};
     Node* n_ptr = g.add(n);
     nodes.push_back(n_ptr);
   }
@@ -37,7 +37,7 @@ SCENARIO("print a graph", "[graph]") {
     REQUIRE(0 == g.size());
     REQUIRE_NOTHROW(g.print(std::cout));
     WHEN("adding a node") {
-      Node foo{"foo", nullptr, 0};
+      Node foo{"foo"};
       g.add(foo);
       REQUIRE(1 == g.size());
       REQUIRE_NOTHROW(g.print(std::cout));
@@ -45,9 +45,9 @@ SCENARIO("print a graph", "[graph]") {
   }
   GIVEN("a non-empty graph") {
     Graph g{false};
-    Node foo{"foo", nullptr, 0};
-    Node bar{"bar", nullptr, 0};
-    Node baz{"baz", nullptr, 0};
+    Node foo{"foo"};
+    Node bar{"bar"};
+    Node baz{"baz"};
     auto foo_ptr = g.add(foo);
     auto bar_ptr = g.add(bar);
     g.add(baz);
