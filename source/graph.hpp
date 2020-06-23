@@ -85,10 +85,11 @@ class Graph {
   /**
    * Add a node to the graph.
    */
-  void add(Node* n);
+  Node* add(Node n);
 
   /**
    * Remove a node from the graph.
+   * This also deletes the node.
    */
   void remove(Node* n);
 

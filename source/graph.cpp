@@ -1,4 +1,5 @@
 #include "graph.hpp"
+#include <cassert>
 #include <iostream>
 
 /* NODE */
@@ -6,7 +7,7 @@
 Node::Node(std::string label, Node* parent, int distance)
     : label_{label}, parent_{parent}, distance_{distance} {}
 
-Node::~Node() {}  // TODO
+Node::~Node() {}  // TODO?
 
 bool Node::operator==(Node const& rhs) const {
   return label_ == rhs.label_;  // TODO is this enough?
@@ -43,16 +44,23 @@ MinHeap::MinHeap() {}  // TODO
 Graph::Graph(bool is_directed)
     : is_directed_(is_directed), min_prio_queue_{new MinHeap} {}
 
-Graph::~Graph() {}  // TODO
+Graph::~Graph() {
+  for (auto n : nodes_)
+    remove(n);
+}
 
-void Graph::add(Node* n) {
-  nodes_.push_back(n);
+Node* Graph::add(Node n) {
+  auto nn = new Node{n};
+  nodes_.push_back(nn);
+  return nn;
 }
 
 void Graph::remove(Node* n) {
   for (auto it = nodes_.begin(); it != nodes_.end(); ++it) {
     if (n == *it) {
       nodes_.erase(it);
+      assert(nullptr != n);
+      delete n;
       return;
     }
   }
