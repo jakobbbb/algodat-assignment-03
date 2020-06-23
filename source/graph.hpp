@@ -14,13 +14,15 @@ struct Node {
   std::map<Node*, int> adjacent;  // ptr to adjacent node -> weight
 
   /**
-   * Use in Prim algorithm:  The Node from which this Node was discovered.
+   * Used in Prim and Bellman–Ford.
+   * The Node from which this Node was discovered.
    */
-  Node* prim_parent = nullptr;
+  Node* parent = nullptr;
   /**
-   * Use in Prim algorithm:  Weight of edge from `prim_parent_` to `*this`.
+   * Weight of edge from `parent` to this Node.
+   * Used in Prim and Bellman–Ford.
    */
-  int prim_key = INT_MAX;
+  int key = INT_MAX;
 
  public:
   Node(std::string label);

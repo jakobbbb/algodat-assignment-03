@@ -101,10 +101,10 @@ void Graph::remove(Node* n) {
 void Graph::prim() {
   // prepare graph
   auto root = nodes_.front();
-  root->prim_key = 0;
+  root->key = 0;
   for (auto u : nodes_) {
-    u->prim_key = INT_MAX;
-    u->prim_parent = nullptr;
+    u->key = INT_MAX;
+    u->parent = nullptr;
   }
 
   // prepare min heap
@@ -115,9 +115,9 @@ void Graph::prim() {
   while (!queue.empty()) {
     auto u = queue.extract_smallest();
     for (auto [v, w] : u->adjacent) {
-      if (queue.contains(v) && w < v->prim_key) {
-        v->prim_parent = u;
-        v->prim_key = w;
+      if (queue.contains(v) && w < v->key) {
+        v->parent = u;
+        v->key = w;
       }
     }
   }
