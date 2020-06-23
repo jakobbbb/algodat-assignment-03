@@ -16,11 +16,11 @@ struct Node {
   /**
    * Use in Prim algorithm:  The Node from which this Node was discovered.
    */
-  Node* prim_parent_ = nullptr;
+  Node* prim_parent = nullptr;
   /**
    * Use in Prim algorithm:  Weight of edge from `prim_parent_` to `*this`.
    */
-  int prim_key_ = INT_MAX;
+  int prim_key = INT_MAX;
 
  public:
   Node(std::string label);
@@ -39,13 +39,6 @@ struct Node {
    * Remove connection between this node and another.
    */
   void disconnect(Node* rhs);
-
-  /**
-   * If the weight of the edge `parent` to `this` is smaller than the current
-   * `prim_key_`, store the parent node and key (distance) for Prim algorithm.
-   * Passing nullptr as parent will set key to zero.
-   */
-  void prim_update_parent(Node* parent);
 
   void print(std::ostream& os, bool is_directed) const;
 };
@@ -67,6 +60,7 @@ struct MinHeapNode {
 class MinHeap {
  private:
   MinHeapNode* root_ = nullptr;
+  std::size_t size_ = 0;
 
  public:
   /**
@@ -89,6 +83,17 @@ class MinHeap {
    * the min heap intact.
    */
   Node* extract_smallest();
+
+  /**
+   * True iff n is contained in the heap.
+   */
+  bool contains(Node* n) const;
+  bool contains(Node* n, MinHeapNode* start) const;
+
+  /**
+   * True iff the heap is empty.
+   */
+  bool empty() const;
 };
 
 class Graph {

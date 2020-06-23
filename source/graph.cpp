@@ -20,23 +20,6 @@ void Node::disconnect(Node* rhs) {
   adjacent.erase(rhs);
 }
 
-void Node::prim_update_parent(Node* parent) {
-  if (nullptr == parent) {
-    prim_parent_ = parent;
-    prim_key_ = 0;
-    return;
-  }
-
-  auto it = parent->adjacent.find(this);
-  if (parent->adjacent.end() == it)
-    throw "Parent is not connected!";
-  auto key = it->second;
-  if (key >= prim_key_)
-    return;  // do not update
-  prim_parent_ = parent;
-  prim_key_ = it->second;
-}
-
 void Node::print(std::ostream& os, bool is_directed) const {
   std::string sep = is_directed ? "->" : "--";
   for (auto el : adjacent) {
@@ -58,7 +41,8 @@ MinHeapNode* MinHeap::add(Node* n) {
   auto m = new MinHeapNode{n};
   if (nullptr == root_)
     root_ = m;
-
+  // TODO
+  ++size_;
   return m;
 }
 
@@ -67,7 +51,24 @@ Node* MinHeap::extract_smallest() {
     return nullptr;
   auto smallest = root_->node;
   // TODO
+  --size_;
   return smallest;
+}
+
+bool MinHeap::contains(Node* n) const {
+  return contains(n, root_);
+}
+
+bool MinHeap::contains(Node* n, MinHeapNode* start) const {
+  if (nullptr == n || nullptr == start)
+    return false;
+  if (start->node == n)
+    return true;
+  return contains(n, start->left) || contains(n, start->right);
+}
+
+bool MinHeap::empty() const {
+  return 0 == size_;
 }
 
 /* GRAPH */
@@ -98,11 +99,28 @@ void Graph::remove(Node* n) {
 }
 
 void Graph::prim() {
+  // prepare graph
   auto root = nodes_.front();
-  root->prim_update_parent(nullptr);
-  for (auto [child, distance] : root->adjacent)
-    child->prim_update_parent(root);
-  // TODO
+  root->prim_key = 0;
+  for (auto u : nodes_) {
+    u->prim_key = INT_MAX;
+    u->prim_parent = nullptr;
+  }
+
+  // prepare min heap
+  auto queue = MinHeap{};
+  for (auto u : nodes_)
+    queue.add(u);
+
+  while (!queue.empty()) {
+    auto u = queue.extract_smallest();
+    for (auto [v, w] : u->adjacent) {
+      if (queue.contains(v) && w < v->prim_key) {
+        v->prim_parent = u;
+        v->prim_key = w;
+      }
+    }
+  }
 }
 
 void Graph::print(std::ostream& os) const {
