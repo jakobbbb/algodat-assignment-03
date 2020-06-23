@@ -1,6 +1,8 @@
 #ifndef GRAPH_HPP
 #define GRAPH_HPP
 
+#include <cassert>
+#include <climits>
 #include <map>
 #include <string>
 #include <vector>
@@ -12,11 +14,18 @@ class Node {
   /* data */
   std::string label_;
   std::map<Node*, int> adjacent_;  // ptr to adjacent node -> weight
-  Node* parent_;
-  int distance_;  // aka key
+
+  /**
+   * Use in Prim algorithm:  The Node from which this Node was discovered.
+   */
+  Node* prim_parent_ = nullptr;
+  /**
+   * Use in Prim algorithm:  Weight of edge from `prim_parent_` to `*this`.
+   */
+  int prim_key_ = INT_MAX;
 
  public:
-  Node(std::string label, Node* parent, int distance);
+  Node(std::string label);
   ~Node();
 
   // TODO: implement additional constructors?
@@ -33,7 +42,12 @@ class Node {
    */
   void disconnect(Node* rhs);
 
-  // TODO: implement methods for manipulating the parent and distance
+  /**
+   * If the weight of the edge `parent` to `this` is smaller than the current
+   * `prim_key_`, store the parent node and key (distance) for Prim algorithm.
+   * Passing nullptr as parent will set key to zero.
+   */
+  void prim_update_parent(Node* parent);
 
   void print(std::ostream& os, bool is_directed) const;
 };
@@ -49,18 +63,34 @@ struct MinHeapNode {
   // TODO: implement additional constructors??
 };
 
+/**
+ * Binary min heap for use in Prim algorithm.
+ */
 class MinHeap {
  private:
-  MinHeapNode* root_;
+  MinHeapNode* root_ = nullptr;
 
  public:
-  MinHeap(/* args */);
-  ~MinHeap();
-  // TODO: implement method for restructuring the min-priority Queue
+  /**
+   * Add a `Node` as a `MinHeapNode`
+   */
+  MinHeapNode* add(Node* n);
+
+  /**
+   * Remove a `Node`.
+   */
+  void remove(Node* n);
+
+  /**
+   * TODO: implement method for restructuring the min-priority Queue
+   */
   void restructure_queue();
-  // TODO: implement method for extracting the smaller element from the
-  // min-priority Queue
-  MinHeapNode* smallest();
+
+  /**
+   * Extract the smallest element, i. e. retrieve and remove it while keeping
+   * the min heap intact.
+   */
+  Node* extract_smallest();
 };
 
 class Graph {
@@ -86,7 +116,10 @@ class Graph {
    */
   void remove(Node* n);
 
-  // TODO: implement Prim
+  /**
+   * Prim algorithm.
+   */
+  void prim();
   // TODO: implement Bellman-Ford
 
   // TODO: implement printGraph function that generates a file written using the

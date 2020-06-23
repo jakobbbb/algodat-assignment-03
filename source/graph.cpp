@@ -4,8 +4,7 @@
 
 /* NODE */
 
-Node::Node(std::string label, Node* parent, int distance)
-    : label_{label}, parent_{parent}, distance_{distance} {}
+Node::Node(std::string label) : label_{label} {}
 
 Node::~Node() {}  // TODO?
 
@@ -19,6 +18,23 @@ void Node::connect(Node* rhs, int weight) {
 
 void Node::disconnect(Node* rhs) {
   adjacent_.erase(rhs);
+}
+
+void Node::prim_update_parent(Node* parent) {
+  if (nullptr == parent) {
+    prim_parent_ = parent;
+    prim_key_ = 0;
+    return;
+  }
+
+  auto it = parent->adjacent_.find(this);
+  if (parent->adjacent_.end() == it)
+    throw "Parent is not connected!";
+  auto key = it->second;
+  if (key >= prim_key_)
+    return;  // do not update
+  prim_parent_ = parent;
+  prim_key_ = it->second;
 }
 
 void Node::print(std::ostream& os, bool is_directed) const {
@@ -38,7 +54,21 @@ MinHeapNode::MinHeapNode(Node* node) : node{node} {}
 
 /* MINHEAP */
 
-MinHeap::MinHeap() {}  // TODO
+MinHeapNode* MinHeap::add(Node* n) {
+  auto m = new MinHeapNode{n};
+  if (nullptr == root_)
+    root_ = m;
+
+  return m;
+}
+
+Node* MinHeap::extract_smallest() {
+  if (nullptr == root_)
+    return nullptr;
+  auto smallest = root_->node;
+  // TODO
+  return smallest;
+}
 
 /* GRAPH */
 
@@ -67,9 +97,12 @@ void Graph::remove(Node* n) {
   }
 }
 
-std::size_t Graph::size() const {
-  return nodes_.size();
-};
+void Graph::prim() {
+  // TODO
+  auto root = nodes_.front();
+  root->prim_update_parent(nullptr);
+  // add to min prio queue
+}
 
 void Graph::print(std::ostream& os) const {
   os << (is_directed_ ? "digraph" : "graph");
@@ -78,3 +111,7 @@ void Graph::print(std::ostream& os) const {
     n->print(os, is_directed_);
   os << "}\n";
 }
+
+std::size_t Graph::size() const {
+  return nodes_.size();
+};
