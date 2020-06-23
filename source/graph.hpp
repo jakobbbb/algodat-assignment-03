@@ -9,11 +9,9 @@
 
 // YOU CAN USE ONLY THE VECTORS, STRINGS AND MAPS FOR THIS ASSIGNMENT!
 
-class Node {
- private:
-  /* data */
-  std::string label_;
-  std::map<Node*, int> adjacent_;  // ptr to adjacent node -> weight
+struct Node {
+  std::string label;
+  std::map<Node*, int> adjacent;  // ptr to adjacent node -> weight
 
   /**
    * Use in Prim algorithm:  The Node from which this Node was discovered.

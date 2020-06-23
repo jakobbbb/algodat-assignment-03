@@ -4,20 +4,20 @@
 
 /* NODE */
 
-Node::Node(std::string label) : label_{label} {}
+Node::Node(std::string label) : label{label} {}
 
 Node::~Node() {}  // TODO?
 
 bool Node::operator==(Node const& rhs) const {
-  return label_ == rhs.label_;  // TODO is this enough?
+  return label == rhs.label;  // TODO is this enough?
 }
 
 void Node::connect(Node* rhs, int weight) {
-  adjacent_.insert(std::make_pair(rhs, weight));
+  adjacent.insert(std::make_pair(rhs, weight));
 }
 
 void Node::disconnect(Node* rhs) {
-  adjacent_.erase(rhs);
+  adjacent.erase(rhs);
 }
 
 void Node::prim_update_parent(Node* parent) {
@@ -27,8 +27,8 @@ void Node::prim_update_parent(Node* parent) {
     return;
   }
 
-  auto it = parent->adjacent_.find(this);
-  if (parent->adjacent_.end() == it)
+  auto it = parent->adjacent.find(this);
+  if (parent->adjacent.end() == it)
     throw "Parent is not connected!";
   auto key = it->second;
   if (key >= prim_key_)
@@ -39,12 +39,12 @@ void Node::prim_update_parent(Node* parent) {
 
 void Node::print(std::ostream& os, bool is_directed) const {
   std::string sep = is_directed ? "->" : "--";
-  for (auto el : adjacent_) {
-    std::string label = el.first->label_;
+  for (auto el : adjacent) {
+    std::string label = el.first->label;
     int weight = el.second;
     os << "  ";  // indent
-    os << "\"" << label_ << "\" " << sep << " ";
-    os << "\"" << el.first->label_ << "\" ";
+    os << "\"" << label << "\" " << sep << " ";
+    os << "\"" << el.first->label << "\" ";
     os << "[weight=" << weight << ", penwidth=" << weight << "];\n";
   }
 }
@@ -98,10 +98,11 @@ void Graph::remove(Node* n) {
 }
 
 void Graph::prim() {
-  // TODO
   auto root = nodes_.front();
   root->prim_update_parent(nullptr);
-  // add to min prio queue
+  for (auto [child, distance] : root->adjacent)
+    child->prim_update_parent(root);
+  // TODO
 }
 
 void Graph::print(std::ostream& os) const {
