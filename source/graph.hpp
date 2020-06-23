@@ -38,22 +38,15 @@ class Node {
   void print(std::ostream& os, bool is_directed) const;
 };
 
-class MinHeapNode {
- private:
-  /* data */
-  Node* node_;
-  MinHeapNode* parent_;
-  MinHeapNode* left_;
-  MinHeapNode* right_;
+struct MinHeapNode {
+  Node* node;
+  MinHeapNode* parent = nullptr;
+  MinHeapNode* left = nullptr;
+  MinHeapNode* right = nullptr;
 
- public:
-  MinHeapNode(Node* node,
-              MinHeapNode* parent,
-              MinHeapNode* left,
-              MinHeapNode* right);
-  ~MinHeapNode();
+  MinHeapNode(Node* node);
 
-  // TODO: implement additional constructors
+  // TODO: implement additional constructors??
 };
 
 class MinHeap {

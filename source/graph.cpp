@@ -34,6 +34,7 @@ void Node::print(std::ostream& os, bool is_directed) const {
 }
 
 /* MINHEAPNODE */
+MinHeapNode::MinHeapNode(Node* node) : node{node} {}
 
 /* MINHEAP */
 
