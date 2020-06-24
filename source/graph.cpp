@@ -24,39 +24,36 @@ void Node::print(std::ostream& os, bool is_directed) const {
   std::string sep = is_directed ? "->" : "--";
   for (auto el : adjacent) {
     std::string label = el.first->label;
+    std::string color = (el.first->parent == this) ? "orange" : "black";
     int weight = el.second;
     os << "  ";  // indent
     os << "\"" << label << "\" " << sep << " ";
     os << "\"" << el.first->label << "\" ";
-    os << "[weight=" << weight << ", penwidth=" << weight << "];\n";
+    os << "[weight=" << weight << ", penwidth=" << weight
+       << ", color=" << color << "];\n";
   }
 }
 
-/* MINHEAPNODE */
-MinHeapNode::MinHeapNode(Node* node) : node{node} {}
-
 /* MINHEAP */
 
+/*
 MinHeapNode* MinHeap::add(Node* n) {
-  auto m = new MinHeapNode{n};
-  if (nullptr == root_)
-    root_ = m;
+  auto m = new MinHeapNode{n, n->key};
   // TODO
-  ++size_;
   return m;
-}
+  }
 
 Node* MinHeap::extract_smallest() {
-  if (nullptr == root_)
+  if (empty())
     return nullptr;
-  auto smallest = root_->node;
+  auto smallest = nodes.front()->node;
   // TODO
-  --size_;
   return smallest;
 }
 
 bool MinHeap::contains(Node* n) const {
-  return contains(n, root_);
+  // return contains(n, root_);
+  return false;
 }
 
 bool MinHeap::contains(Node* n, MinHeapNode* start) const {
@@ -64,12 +61,14 @@ bool MinHeap::contains(Node* n, MinHeapNode* start) const {
     return false;
   if (start->node == n)
     return true;
-  return contains(n, start->left) || contains(n, start->right);
+  // return contains(n, start->left) || contains(n, start->right);
+  return false;
 }
 
 bool MinHeap::empty() const {
-  return 0 == size_;
+  return nodes.empty();
 }
+*/
 
 /* GRAPH */
 
@@ -98,6 +97,7 @@ void Graph::remove(Node* n) {
   }
 }
 
+/*
 void Graph::prim() {
   // prepare graph
   auto root = nodes_.front();
@@ -120,6 +120,36 @@ void Graph::prim() {
         v->key = w;
       }
     }
+  }
+}
+*/
+
+bool Graph::bellmann_ford(Node* s) {
+  for (auto& u : nodes_) {
+    u->key = INT_MAX;
+    u->parent = nullptr;
+  }
+  s->key = 0;
+  for (std::size_t i = 1; i < nodes_.size(); ++i) {
+    for (auto& u : nodes_) {
+      for (auto [v, w] : u->adjacent) {
+        relax(u, v, w);
+      }
+    }
+  }
+  for (auto& u : nodes_) {
+    for (auto [v, w] : u->adjacent) {
+      if (v->key > w + u->key)
+        return false;
+    }
+  }
+  return true;
+}
+
+void Graph::relax(Node* u, Node* v, int w) {
+  if (v->key > w + u->key) {
+    v->parent = u;
+    v->key = w + u->key;
   }
 }
 

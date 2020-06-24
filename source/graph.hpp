@@ -47,13 +47,9 @@ struct Node {
 
 struct MinHeapNode {
   Node* node;
-  MinHeapNode* parent = nullptr;
-  MinHeapNode* left = nullptr;
-  MinHeapNode* right = nullptr;
+  int key;
 
-  MinHeapNode(Node* node);
-
-  // TODO: implement additional constructors??
+  MinHeapNode(Node* node, int key);
 };
 
 /**
@@ -61,8 +57,7 @@ struct MinHeapNode {
  */
 class MinHeap {
  private:
-  MinHeapNode* root_ = nullptr;
-  std::size_t size_ = 0;
+  std::vector<MinHeapNode*> nodes;
 
  public:
   /**
@@ -74,11 +69,6 @@ class MinHeap {
    * Remove a `Node`.
    */
   void remove(Node* n);
-
-  /**
-   * TODO: implement method for restructuring the min-priority Queue
-   */
-  void restructure_queue();
 
   /**
    * Extract the smallest element, i. e. retrieve and remove it while keeping
@@ -124,8 +114,14 @@ class Graph {
   /**
    * Prim algorithm.
    */
-  void prim();
-  // TODO: implement Bellman-Ford
+  // void prim();
+
+  /**
+   * Bellman–Ford algorithm.
+   * s: chosen source
+   */
+  bool bellmann_ford(Node* s);
+  void relax(Node* u, Node* v, int w);
 
   // TODO: implement printGraph function that generates a file written using the
   // dot format
