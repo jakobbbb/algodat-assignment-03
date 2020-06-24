@@ -70,9 +70,10 @@ class MinHeap {
   void add(Node* n);
 
   /**
-   * Remove a `Node`.
+   * Restore min-heap property
+   * for reference, see CLRS p. 162
    */
-  void remove(Node* n);
+  void decrease_key(int i, int key);
 
   /**
    * Extract the smallest element, i. e. retrieve and remove it while keeping

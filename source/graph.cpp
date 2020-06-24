@@ -65,7 +65,21 @@ int MinHeap::right(int i) const {
 
 void MinHeap::add(Node* n) {
   nodes_.push_back(n);
-  // TODO
+  decrease_key(nodes_.size() - 1, n->key);
+  assert(valid());
+}
+
+void MinHeap::decrease_key(int i, int key) {
+  if (key > nodes_[i]->key)
+    throw "new key cannot be larger than current key";
+  nodes_[i]->key = key;
+  while (i > 0 && nodes_[parent(i)]->key > nodes_[i]->key) {
+    // std::iter_swap(nodes_[i], nodes_[parent(i)]);
+    auto tmp = nodes_[i];
+    nodes_[i] = nodes_[parent(i)];
+    nodes_[parent(i)] = tmp;
+    i = parent(i);
+  }
   assert(valid());
 }
 
@@ -74,6 +88,7 @@ Node* MinHeap::extract_smallest() {
     return nullptr;
   auto smallest = nodes_.front();
   // TODO
+  throw "TODO";
   assert(valid());
   return smallest;
 }
@@ -98,8 +113,9 @@ bool MinHeap::valid() const {
   if (nodes_.size() <= 2)
     return true;
   for (std::vector<Node*>::size_type i = 1; i < nodes_.size(); ++i) {
-    if (nodes_[parent(i)] < nodes_[i])
+    if (nodes_[parent(i)]->key > nodes_[i]->key) {
       return false;
+    }
   }
   return true;
 }

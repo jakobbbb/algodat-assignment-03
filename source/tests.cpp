@@ -19,6 +19,10 @@ SCENARIO("min-heap", "[heap]") {
     REQUIRE(h.valid());
     REQUIRE(i + 1 == h.size());
   }
+  for (std::size_t i = 0; i < 100; ++i) {
+    h.extract_smallest();
+    REQUIRE(h.valid());
+  }
 }
 
 /**
