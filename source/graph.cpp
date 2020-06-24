@@ -1,10 +1,8 @@
 #include "graph.hpp"
+#include <algorithm>
 #include <cassert>
 #include <iostream>
-#include <algorithm>
 #include <vector>
-
-#define INFINITY 9999
 
 /* NODE */
 
@@ -17,7 +15,7 @@ bool Node::operator==(Node const& rhs) const {
 }
 
 void Node::connect(Node* rhs, int weight) {
-  assert(INFINITY > weight);
+  assert(INFTY > weight);
   adjacent.insert(std::make_pair(rhs, weight));
 }
 
@@ -43,7 +41,7 @@ void Node::print(std::ostream& os, bool directed) const {
 
 std::ostream& operator<<(std::ostream& os, Node const& n) {
   os << n.label << "\\n(";
-  if (INFINITY == n.key)
+  if (INFTY == n.key)
     os << "inf";
   else
     os << n.key;
@@ -120,7 +118,7 @@ void Graph::prim() {
   auto root = nodes_.front();
   root->key = 0;
   for (auto u : nodes_) {
-    u->key = INFINITY;
+    u->key = INFTY;
     u->parent = nullptr;
   }
 
@@ -144,7 +142,7 @@ void Graph::prim() {
 bool Graph::bellmann_ford(Node* s) {
   // setup
   for (auto& u : nodes_) {
-    u->key = INFINITY;
+    u->key = INFTY;
     u->parent = nullptr;
   }
   s->key = 0;
@@ -185,4 +183,4 @@ void Graph::print(std::ostream& os) const {
 
 std::size_t Graph::size() const {
   return nodes_.size();
-};
+}

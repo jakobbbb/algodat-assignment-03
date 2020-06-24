@@ -2,10 +2,11 @@
 #define GRAPH_HPP
 
 #include <cassert>
-#include <climits>
 #include <map>
 #include <string>
 #include <vector>
+
+#define INFTY 99999
 
 // YOU CAN USE ONLY THE VECTORS, STRINGS AND MAPS FOR THIS ASSIGNMENT!
 
@@ -32,7 +33,7 @@ struct Node {
    * Weight of edge from `parent` to this Node.
    * Used in Prim and Bellman–Ford.
    */
-  int key = INT_MAX;
+  int key = INFTY;
 
 
   /**
