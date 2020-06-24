@@ -9,14 +9,16 @@
  * elements has a chance `p` of being connected with a random weight between 1
  * and max_weight.
  */
-Graph make_graph(bool is_directed, int n_elements, int max_weight, float p) {
+std::pair<Graph*, std::vector<Node*>> make_graph(bool is_directed,
+                                                 int n_elements,
+                                                 int max_weight,
+                                                 float p) {
   std::srand(0);
-  Graph g{is_directed};
+  auto g = new Graph{is_directed};
   std::vector<Node*> nodes;
   for (int i = 0; i < n_elements; ++i) {
-    Node n{"n" + std::to_string(i)};
-    Node* n_ptr = g.add(n);
-    nodes.push_back(n_ptr);
+    auto n = g->add({"n" + std::to_string(i)});
+    nodes.push_back(n);
   }
   for (auto n : nodes) {
     for (auto m : nodes) {
@@ -28,7 +30,7 @@ Graph make_graph(bool is_directed, int n_elements, int max_weight, float p) {
       }
     }
   }
-  return g;
+  return std::make_pair(g, nodes);
 }
 
 SCENARIO("print a graph", "[graph]") {
@@ -57,9 +59,9 @@ SCENARIO("print a graph", "[graph]") {
   }
   GIVEN("a large graph") {
     const int size = 200;
-    auto g = make_graph(false, size, 15, 0.01f);
-    REQUIRE(size == g.size());
-    REQUIRE_NOTHROW(g.print(std::cout));
+    auto g = make_graph(false, size, 15, 0.01f).first;
+    REQUIRE(size == g->size());
+    REQUIRE_NOTHROW(g->print(std::cout));
   }
 
   GIVEN("an empty digraph") {
@@ -70,32 +72,44 @@ SCENARIO("print a graph", "[graph]") {
 }
 
 SCENARIO("bellman-ford", "[bellman]") {
-  GIVEN("a non-empty graph") {
+  GIVEN("the digraph presented in the exercise") {
     Graph g{true};
-    auto r = g.add({"r"});
-    auto s = g.add({"s"});
-    auto t = g.add({"t"});
-    auto x = g.add({"x"});
-    auto y = g.add({"y"});
-    auto z = g.add({"z"});
 
-    r->connect(s, 5);
-    s->connect(t, 2);
-    t->connect(x, 7);
-    x->connect(y, -1);
-    y->connect(z, -2);
-    s->connect(x, 6);
-    x->connect(z, 1);
-    r->connect(t, 3);
-    t->connect(y, 4);
-    t->connect(z, 2);
+    auto a = g.add({"a"});
+    auto b = g.add({"b"});
+    auto c = g.add({"c"});
+    auto d = g.add({"d"});
+    auto e = g.add({"e"});
+    auto f = g.add({"f"});
 
-    REQUIRE(6 == g.size());
-    std::cout << "----------\n";
-    g.print(std::cout);
-    std::cout << "----------\n";
-    std::cout << (g.bellmann_ford(s) ? "TRUE" : "FALSE");
-    std::cout << "----------\n";
-    g.print(std::cout);
+    a->connect(e, 7);
+    a->connect(f, 5);
+    b->connect(a, 1);
+    b->connect(c, 3);
+    c->connect(d, 9);
+    d->connect(c, 3);
+    d->connect(e, 2);
+    d->connect(f, 1);
+    e->connect(b, 2);
+    e->connect(c, 4);
+    f->connect(e, 2);
+    REQUIRE(g.bellmann_ford(a));
+  }
+
+  GIVEN("a digraph") {
+    const int size = 20;
+    auto [g, nodes] = make_graph(true, size, 15, 0.1f);
+    REQUIRE(size == g->size());
+    for (auto n : nodes) {
+      REQUIRE_NOTHROW(g->bellmann_ford(n));
+      REQUIRE_NOTHROW(g->print(std::cout));
+    }
+  }
+
+  GIVEN("a large digraph") {
+    const int size = 200;
+    auto [g, nodes] = make_graph(true, size, 15, 0.1f);
+    REQUIRE(size == g->size());
+    REQUIRE_NOTHROW(g->bellmann_ford(nodes.front()));
   }
 }
