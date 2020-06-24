@@ -106,7 +106,6 @@ class Graph {
  private:
   bool is_directed_;
   std::vector<Node*> nodes_;
-  MinHeap* min_prio_queue_;
 
  public:
   Graph(bool is_directed);

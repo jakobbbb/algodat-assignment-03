@@ -106,8 +106,7 @@ bool MinHeap::valid() const {
 
 /* GRAPH */
 
-Graph::Graph(bool is_directed)
-    : is_directed_(is_directed), min_prio_queue_{new MinHeap} {}
+Graph::Graph(bool is_directed) : is_directed_(is_directed) {}
 
 Graph::~Graph() {
   for (auto n : nodes_)
