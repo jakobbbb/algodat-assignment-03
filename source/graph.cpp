@@ -1,6 +1,10 @@
 #include "graph.hpp"
 #include <cassert>
 #include <iostream>
+#include <algorithm>
+#include <vector>
+
+#define INFINITY 9999
 
 /* NODE */
 
@@ -13,6 +17,7 @@ bool Node::operator==(Node const& rhs) const {
 }
 
 void Node::connect(Node* rhs, int weight) {
+  assert(INFINITY > weight);
   adjacent.insert(std::make_pair(rhs, weight));
 }
 
@@ -20,18 +25,30 @@ void Node::disconnect(Node* rhs) {
   adjacent.erase(rhs);
 }
 
-void Node::print(std::ostream& os, bool is_directed) const {
-  std::string sep = is_directed ? "->" : "--";
-  for (auto el : adjacent) {
-    std::string label = el.first->label;
-    std::string color = (el.first->parent == this) ? "orange" : "black";
-    int weight = el.second;
-    os << "  ";  // indent
-    os << "\"" << label << "\" " << sep << " ";
-    os << "\"" << el.first->label << "\" ";
-    os << "[weight=" << weight << ", penwidth=" << weight
-       << ", color=" << color << "];\n";
+void Node::print(std::ostream& os, bool directed) const {
+  std::string sep = directed ? "->" : "--";
+
+  for (auto [other, weight] : adjacent) {
+    std::string color = (other->parent == this) ? "blue" : "black";
+    os << "  "  // indent
+       << "\"" << *this << "\" "
+       << sep
+       << " \"" << *other << "\" "
+       << "["
+       << "label=" << weight << ", "
+       << "color=" << color
+       << "];\n";
   }
+}
+
+std::ostream& operator<<(std::ostream& os, Node const& n) {
+  os << n.label << "\\n(";
+  if (INFINITY == n.key)
+    os << "inf";
+  else
+    os << n.key;
+  os << ")";
+  return os;
 }
 
 /* MINHEAP */
@@ -103,7 +120,7 @@ void Graph::prim() {
   auto root = nodes_.front();
   root->key = 0;
   for (auto u : nodes_) {
-    u->key = INT_MAX;
+    u->key = INFINITY;
     u->parent = nullptr;
   }
 
@@ -125,11 +142,14 @@ void Graph::prim() {
 */
 
 bool Graph::bellmann_ford(Node* s) {
+  // setup
   for (auto& u : nodes_) {
-    u->key = INT_MAX;
+    u->key = INFINITY;
     u->parent = nullptr;
   }
   s->key = 0;
+
+  // attempt to relaxe all edges nodes_.size()-1 times
   for (std::size_t i = 1; i < nodes_.size(); ++i) {
     for (auto& u : nodes_) {
       for (auto [v, w] : u->adjacent) {
@@ -137,6 +157,8 @@ bool Graph::bellmann_ford(Node* s) {
       }
     }
   }
+
+  // check for negative cycles
   for (auto& u : nodes_) {
     for (auto [v, w] : u->adjacent) {
       if (v->key > w + u->key)
@@ -147,7 +169,7 @@ bool Graph::bellmann_ford(Node* s) {
 }
 
 void Graph::relax(Node* u, Node* v, int w) {
-  if (v->key > w + u->key) {
+  if (v->key > (w + u->key)) {
     v->parent = u;
     v->key = w + u->key;
   }

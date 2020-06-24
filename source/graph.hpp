@@ -9,9 +9,19 @@
 
 // YOU CAN USE ONLY THE VECTORS, STRINGS AND MAPS FOR THIS ASSIGNMENT!
 
+struct Node;
+struct MinHeapNode;
+class MinHeap;
+class Graph;
+
 struct Node {
   std::string label;
   std::map<Node*, int> adjacent;  // ptr to adjacent node -> weight
+
+  Node(std::string label);
+  ~Node();
+
+  bool operator==(Node const& rhs) const;
 
   /**
    * Used in Prim and Bellman–Ford.
@@ -24,13 +34,6 @@ struct Node {
    */
   int key = INT_MAX;
 
- public:
-  Node(std::string label);
-  ~Node();
-
-  // TODO: implement additional constructors?
-
-  bool operator==(Node const& rhs) const;
 
   /**
    * Add a connection between this node and another.
@@ -42,8 +45,10 @@ struct Node {
    */
   void disconnect(Node* rhs);
 
-  void print(std::ostream& os, bool is_directed) const;
+  void print(std::ostream& os, bool directed) const;
 };
+
+std::ostream& operator<<(std::ostream& os, Node const& n);
 
 struct MinHeapNode {
   Node* node;
@@ -119,6 +124,8 @@ class Graph {
   /**
    * Bellman–Ford algorithm.
    * s: chosen source
+   * Returns false if no answer could be found, e. g. due to the graph being
+   * cyclic.
    */
   bool bellmann_ford(Node* s);
   void relax(Node* u, Node* v, int w);

@@ -71,20 +71,31 @@ SCENARIO("print a graph", "[graph]") {
 
 SCENARIO("bellman-ford", "[bellman]") {
   GIVEN("a non-empty graph") {
-    Graph g{false};
-    Node foo{"foo"};
-    Node bar{"bar"};
-    Node baz{"baz"};
-    auto foo_ptr = g.add(foo);
-    auto bar_ptr = g.add(bar);
-    auto baz_ptr = g.add(baz);
-    foo_ptr->connect(bar_ptr, 3);
-    foo_ptr->connect(baz_ptr, 5);
-    REQUIRE(3 == g.size());
+    Graph g{true};
+    auto r = g.add({"r"});
+    auto s = g.add({"s"});
+    auto t = g.add({"t"});
+    auto x = g.add({"x"});
+    auto y = g.add({"y"});
+    auto z = g.add({"z"});
+
+    r->connect(s, 5);
+    s->connect(t, 2);
+    t->connect(x, 7);
+    x->connect(y, -1);
+    y->connect(z, -2);
+    s->connect(x, 6);
+    x->connect(z, 1);
+    r->connect(t, 3);
+    t->connect(y, 4);
+    t->connect(z, 2);
+
+    REQUIRE(6 == g.size());
     std::cout << "----------\n";
     g.print(std::cout);
     std::cout << "----------\n";
-    std::cout << (g.bellmann_ford(foo_ptr) ? "t" : "f");
+    std::cout << (g.bellmann_ford(s) ? "TRUE" : "FALSE");
+    std::cout << "----------\n";
     g.print(std::cout);
   }
 }
