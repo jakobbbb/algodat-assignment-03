@@ -106,7 +106,7 @@ bool MinHeap::valid() const {
 
 /* GRAPH */
 
-Graph::Graph(bool is_directed) : is_directed_(is_directed) {}
+Graph::Graph(bool directed) : directed_(directed) {}
 
 Graph::~Graph() {
   for (auto n : nodes_)
@@ -190,10 +190,10 @@ void Graph::relax(Node* u, Node* v, int w) {
 }
 
 void Graph::print(std::ostream& os) const {
-  os << (is_directed_ ? "digraph" : "graph");
+  os << (directed_ ? "digraph" : "graph");
   os << " {\n";
   for (auto const& n : nodes_)
-    n->print(os, is_directed_);
+    n->print(os, directed_);
   os << "}\n";
 }
 

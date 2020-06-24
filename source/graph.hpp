@@ -104,11 +104,11 @@ class MinHeap {
 
 class Graph {
  private:
-  bool is_directed_;
+  bool directed_;
   std::vector<Node*> nodes_;
 
  public:
-  Graph(bool is_directed);
+  Graph(bool directed);
   ~Graph();
 
   // TODO: implement additional constructors
