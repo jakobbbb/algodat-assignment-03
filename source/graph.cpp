@@ -51,39 +51,58 @@ std::ostream& operator<<(std::ostream& os, Node const& n) {
 
 /* MINHEAP */
 
-/*
-MinHeapNode* MinHeap::add(Node* n) {
-  auto m = new MinHeapNode{n, n->key};
+int MinHeap::parent(int i) const {
+  return i / 2;  // floor is implicit
+}
+
+int MinHeap::left(int i) const {
+  return 2 * i;
+}
+
+int MinHeap::right(int i) const {
+  return 2 * i + 1;
+}
+
+void MinHeap::add(Node* n) {
+  nodes_.push_back(n);
   // TODO
-  return m;
-  }
+  assert(valid());
+}
 
 Node* MinHeap::extract_smallest() {
   if (empty())
     return nullptr;
-  auto smallest = nodes.front()->node;
+  auto smallest = nodes_.front();
   // TODO
+  assert(valid());
   return smallest;
 }
 
 bool MinHeap::contains(Node* n) const {
-  // return contains(n, root_);
-  return false;
-}
-
-bool MinHeap::contains(Node* n, MinHeapNode* start) const {
-  if (nullptr == n || nullptr == start)
-    return false;
-  if (start->node == n)
-    return true;
-  // return contains(n, start->left) || contains(n, start->right);
+  for (auto node : nodes_) {
+    if (node == n)
+      return true;
+  }
   return false;
 }
 
 bool MinHeap::empty() const {
-  return nodes.empty();
+  return nodes_.empty();
 }
-*/
+
+std::size_t MinHeap::size() const {
+  return nodes_.size();
+}
+
+bool MinHeap::valid() const {
+  if (nodes_.size() <= 2)
+    return true;
+  for (std::vector<Node*>::size_type i = 1; i < nodes_.size(); ++i) {
+    if (nodes_[parent(i)] < nodes_[i])
+      return false;
+  }
+  return true;
+}
 
 /* GRAPH */
 
@@ -112,7 +131,6 @@ void Graph::remove(Node* n) {
   }
 }
 
-/*
 void Graph::prim() {
   // prepare graph
   auto root = nodes_.front();
@@ -123,7 +141,7 @@ void Graph::prim() {
   }
 
   // prepare min heap
-  auto queue = MinHeap{};
+  MinHeap queue;
   for (auto u : nodes_)
     queue.add(u);
 
@@ -137,7 +155,6 @@ void Graph::prim() {
     }
   }
 }
-*/
 
 bool Graph::bellmann_ford(Node* s) {
   // setup

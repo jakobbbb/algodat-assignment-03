@@ -51,25 +51,23 @@ struct Node {
 
 std::ostream& operator<<(std::ostream& os, Node const& n);
 
-struct MinHeapNode {
-  Node* node;
-  int key;
-
-  MinHeapNode(Node* node, int key);
-};
-
 /**
  * Binary min heap for use in Prim algorithm.
  */
 class MinHeap {
  private:
-  std::vector<MinHeapNode*> nodes;
+  // Basing the heap on a vector/array should be more efficient and easier to
+  // work with.
+  std::vector<Node*> nodes_;
+  int parent(int i) const;
+  int left(int i) const;
+  int right(int i) const;
 
  public:
   /**
-   * Add a `Node` as a `MinHeapNode`
+   * Add a `Node` to the heap.
    */
-  MinHeapNode* add(Node* n);
+  void add(Node* n);
 
   /**
    * Remove a `Node`.
@@ -86,12 +84,22 @@ class MinHeap {
    * True iff n is contained in the heap.
    */
   bool contains(Node* n) const;
-  bool contains(Node* n, MinHeapNode* start) const;
 
   /**
    * True iff the heap is empty.
    */
   bool empty() const;
+
+  /**
+   * Number of elements in the heap.
+   */
+  std::size_t size() const;
+
+  /**
+   * (used for testing)
+   * True iff the min-heap property is fulfilled
+   */
+  bool valid() const;
 };
 
 class Graph {
@@ -120,7 +128,7 @@ class Graph {
   /**
    * Prim algorithm.
    */
-  // void prim();
+  void prim();
 
   /**
    * Bellman–Ford algorithm.
