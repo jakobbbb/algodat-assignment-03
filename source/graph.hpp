@@ -48,6 +48,7 @@ std::ostream& operator<<(std::ostream& os, Node const& n);
 
 /**
  * Binary min heap for use in Prim algorithm.
+ * algorithms referenced from CLRS, Chapter 6
  */
 class MinHeap {
  private:

@@ -15,6 +15,14 @@ make
 
 Executables will be in `build/source`.
 
+`source/bell` and `source/prim` run the algorithms on example input and
+write a `.dot` file each, which can be rendered like this,
+```
+dot -Tsvg bellmann_ford.dot > bellmann_ford.svg
+dot -Tsvg prim.dot > prim.svg
+```
+to get output like in the examples below:
+
 ## Bellmann-Ford
 
 For a given starting node _v_, the Bellmann-Ford algorithm finds the
@@ -37,3 +45,9 @@ nodes such that the sum of weights within the tree is minimal.  Blue
 edges are part of the MST:
 
 ![example graph](doc/prim.svg#2)
+
+## References
+
+**CLRS**:  Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest, and
+Clifford Stein. 2009. _Introduction to Algorithms_, Third Edition (3rd.
+ed.). The MIT Press.
