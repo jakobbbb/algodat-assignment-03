@@ -30,3 +30,8 @@ jobs:
 
     - name: tests
       run: build/source/tests
+
+    - name: run
+      run: |
+          build/source/run_prim
+          build/source/run_bellmann_ford
