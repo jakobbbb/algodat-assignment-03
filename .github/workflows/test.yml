@@ -33,5 +33,5 @@ jobs:
 
     - name: run
       run: |
-          build/source/run_prim
-          build/source/run_bellmann_ford
+          build/source/prim
+          build/source/bell
