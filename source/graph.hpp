@@ -51,29 +51,37 @@ struct Node {
 
 std::ostream& operator<<(std::ostream& os, Node const& n);
 
+struct MinHeapNode {
+  Node* node;
+  MinHeapNode* parent;
+  MinHeapNode* left;
+  MinHeapNode* right;
+  int key;
+};
+
 /**
  * Binary min heap for use in Prim algorithm.
  */
 class MinHeap {
  private:
-  // Basing the heap on a vector/array should be more efficient and easier to
-  // work with.
-  std::vector<Node*> nodes_;
-  int parent(int i) const;
-  int left(int i) const;
-  int right(int i) const;
+  MinHeapNode* root_;
+  std::size_t size_;
 
  public:
   /**
-   * Add a `Node` to the heap.
+   * Initialize the min heap.
    */
-  void add(Node* n);
+  void build(std::vector<Node*> const& nodes);
 
   /**
    * Restore min-heap property
-   * for reference, see CLRS p. 162
    */
-  void decrease_key(int i, int key);
+  void heapify(MinHeapNode* n);
+
+  /**
+   * Exchange/swap two nodes.
+   */
+  void exchange(MinHeapNode* a, MinHeapNode* b);
 
   /**
    * Extract the smallest element, i. e. retrieve and remove it while keeping
@@ -117,7 +125,7 @@ class Graph {
   /**
    * Add a node to the graph.
    */
-  Node* add(Node n);
+  Node* add(Node const& n);
 
   /**
    * Remove a node from the graph.

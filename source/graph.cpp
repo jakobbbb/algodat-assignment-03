@@ -51,42 +51,37 @@ std::ostream& operator<<(std::ostream& os, Node const& n) {
 
 /* MINHEAP */
 
-int MinHeap::parent(int i) const {
-  return i / 2;  // floor is implicit
-}
-
-int MinHeap::left(int i) const {
-  return 2 * i;
-}
-
-int MinHeap::right(int i) const {
-  return 2 * i + 1;
-}
-
-void MinHeap::add(Node* n) {
-  nodes_.push_back(n);
-  decrease_key(nodes_.size() - 1, n->key);
-  assert(valid());
-}
-
-void MinHeap::decrease_key(int i, int key) {
-  if (key > nodes_[i]->key)
-    throw "new key cannot be larger than current key";
-  nodes_[i]->key = key;
-  while (i > 0 && nodes_[parent(i)]->key > nodes_[i]->key) {
-    // std::iter_swap(nodes_[i], nodes_[parent(i)]);
-    auto tmp = nodes_[i];
-    nodes_[i] = nodes_[parent(i)];
-    nodes_[parent(i)] = tmp;
-    i = parent(i);
+void MinHeap::build(std::vector<Node*> const& nodes) {
+  size_ = nodes.size();
+  for (int i = size_/2; i >= 1; --i) {
   }
+  // TODO
   assert(valid());
+}
+
+void MinHeap::heapify(MinHeapNode* n) {
+  auto l = n->left;
+  auto r = n->right;
+  auto smallest = n;
+  if (l->key <= size_ && l->key < n->key)
+    smallest = l;
+  if (r->key <= size_ && r->key < smallest->key)
+    smallest =r;
+  if (smallest != n) {
+    exchange(n, smallest);
+    heapify(smallest);
+  }
+}
+
+void MinHeap::exchange(MinHeapNode* a, MinHeapNode* b) {
+  std::swap(a->node, b->node);
+  std::swap(a->key, b->key);
 }
 
 Node* MinHeap::extract_smallest() {
   if (empty())
     return nullptr;
-  auto smallest = nodes_.front();
+  auto smallest = root_->node;
   // TODO
   throw "TODO";
   assert(valid());
@@ -94,30 +89,17 @@ Node* MinHeap::extract_smallest() {
 }
 
 bool MinHeap::contains(Node* n) const {
-  for (auto node : nodes_) {
-    if (node == n)
-      return true;
-  }
+  // TODO
   return false;
 }
 
 bool MinHeap::empty() const {
-  return nodes_.empty();
-}
-
-std::size_t MinHeap::size() const {
-  return nodes_.size();
+  return 0 == size_;
 }
 
 bool MinHeap::valid() const {
-  if (nodes_.size() <= 2)
-    return true;
-  for (std::vector<Node*>::size_type i = 1; i < nodes_.size(); ++i) {
-    if (nodes_[parent(i)]->key > nodes_[i]->key) {
-      return false;
-    }
-  }
-  return true;
+  // TODO
+  return false;
 }
 
 /* GRAPH */
@@ -129,7 +111,7 @@ Graph::~Graph() {
     remove(n);
 }
 
-Node* Graph::add(Node n) {
+Node* Graph::add(Node const& n) {
   auto nn = new Node{n};
   nodes_.push_back(nn);
   return nn;
@@ -155,15 +137,21 @@ void Graph::prim() {
     u->parent = nullptr;
   }
 
-  // prepare min heap
-  MinHeap queue;
+  std::vector<Node*> queue;  // "queue"
   for (auto u : nodes_)
-    queue.add(u);
+    queue.push_back(u);
+
+  std::sort(queue.begin(), queue.end(), [](Node* a, Node* b) {
+      return a->key > b->key;
+      });
 
   while (!queue.empty()) {
-    auto u = queue.extract_smallest();
+    auto u = queue.back();
+    queue.pop_back();
     for (auto [v, w] : u->adjacent) {
-      if (queue.contains(v) && w < v->key) {
+      if ((!queue.empty() &&
+           std::find(queue.begin(), queue.end(), v) != queue.end()) &&
+          w < v->key) {
         v->parent = u;
         v->key = w;
       }

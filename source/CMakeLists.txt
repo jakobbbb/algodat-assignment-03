@@ -8,5 +8,10 @@ add_executable(bell
     graph.cpp
     )
 
+add_executable(prim
+    run_prim.cpp
+    graph.cpp
+    )
+
 # generate compile_commands.json
 set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
