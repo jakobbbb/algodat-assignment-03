@@ -141,16 +141,13 @@ void Graph::prim() {
   for (auto u : nodes_)
     queue.push_back(u);
 
-  std::sort(queue.begin(), queue.end(), [](Node* a, Node* b) {
-      return a->key > b->key;
-      });
-
   while (!queue.empty()) {
+    std::sort(queue.begin(), queue.end(),
+              [](Node* a, Node* b) { return a->key > b->key; });
     auto u = queue.back();
     queue.pop_back();
     for (auto [v, w] : u->adjacent) {
-      if ((!queue.empty() &&
-           std::find(queue.begin(), queue.end(), v) != queue.end()) &&
+      if ((std::find(queue.begin(), queue.end(), v) != queue.end()) &&
           w < v->key) {
         v->parent = u;
         v->key = w;
