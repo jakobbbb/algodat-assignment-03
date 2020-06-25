@@ -1,6 +1,6 @@
-#include "graph.hpp"
+#include <fstream>
 #include <iostream>
-
+#include "graph.hpp"
 
 int main() {
   Graph g{true};
@@ -29,8 +29,12 @@ int main() {
 
   f->connect(e, 2);
 
-  if (g.bellmann_ford(a))
-    g.print(std::cout);
-  else
+  if (g.bellmann_ford(a)) {
+    std::ofstream out;
+    out.open("bellmann_ford.dot");
+    g.print(out);
+    out.close();
+  } else {
     std::cout << "Couldn't run Bellmann-Ford :(\n";
+  }
 }

@@ -1,6 +1,6 @@
-#include "graph.hpp"
+#include <fstream>
 #include <iostream>
-
+#include "graph.hpp"
 
 int main() {
   Graph g{false};
@@ -29,5 +29,9 @@ int main() {
   f->connect(e, 2);
 
   g.prim();
-  g.print(std::cout);
+
+  std::ofstream out;
+  out.open("prim.dot");
+  g.print(out);
+  out.close();
 }
