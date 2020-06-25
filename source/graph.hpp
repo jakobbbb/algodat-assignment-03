@@ -57,12 +57,21 @@ class MinHeap {
   /**
    * Get the key of the node at index i.
    */
-  int key(int i);
+  int key(int i) const;
 
  public:
-
   MinHeap() = default;
   MinHeap(std::vector<Node*> const& nodes);
+
+  /**
+   * Insert a node.
+   */
+  void insert(Node* n);
+
+  /**
+   * Decrease key (used by insert)
+   */
+  void decrease_key(int i, int key);
 
   /**
    * Restore min-heap property
@@ -94,12 +103,6 @@ class MinHeap {
    * Number of elements in the heap.
    */
   std::size_t size() const;
-
-  /**
-   * (used for testing)
-   * True iff the min-heap property is fulfilled
-   */
-  bool valid() const;
 };
 
 class Graph {

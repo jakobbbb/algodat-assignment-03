@@ -54,17 +54,27 @@ int right(int i) {
   return (2 * i) + 1;
 }
 
-MinHeap::MinHeap(std::vector<Node*> const& nodes) : nodes_{nodes} {
-  // build-min-heap
-  for (int i = size() / 2; i >= 1; --i) {
-    std::cout << "i=" << i << "\n";
-    heapify(i - 1);
-  }
-  assert(valid());
+MinHeap::MinHeap(std::vector<Node*> const& nodes) {
+  for (auto& n : nodes)
+    insert(n);
 }
 
-int MinHeap::key(int i) {
-  std::cout << "key for i=" << i << ", size is " << size() << "\n";
+void MinHeap::decrease_key(int i, int key) {
+  if (key > nodes_[i]->key)
+    throw "new key cannot be larger than current key";
+  nodes_[i]->key = key;
+  while (i > 0 && nodes_[parent(i)]->key > nodes_[i]->key) {
+    swap(i, parent(i));
+    i = parent(i);
+  }
+}
+
+void MinHeap::insert(Node* n) {
+  nodes_.push_back(n);
+  decrease_key(nodes_.size() - 1, n->key);
+}
+
+int MinHeap::key(int i) const {
   assert(i < size());
   return nodes_[i]->key;
 }
@@ -93,10 +103,9 @@ Node* MinHeap::extract() {
   if (empty())
     throw "Cannot extract from empty heap!";
   auto smallest = nodes_.front();
-  swap(0, size() - 1);
+  nodes_[0] = nodes_.back();
   nodes_.pop_back();
   heapify(0);
-  assert(valid());
   return smallest;
 }
 
@@ -112,17 +121,6 @@ std::size_t MinHeap::size() const {
 
 bool MinHeap::empty() const {
   return 0 == size();
-}
-
-bool MinHeap::valid() const {
-  if (nodes_.size() <= 2)
-    return true;
-  for (std::vector<Node*>::size_type i = 1; i < nodes_.size(); ++i) {
-    if (nodes_[parent(i)]->key > nodes_[i]->key) {
-      return false;
-    }
-  }
-  return true;
 }
 
 /* GRAPH */
@@ -160,23 +158,12 @@ void Graph::prim() {
     u->parent = nullptr;
   }
 
-  /* Had some trouble creating the MinHeap, so we're substituting it with a
-   * simple array of nodes that gets sorted.  This, of course, drags efficiency
-   * down, but allows Prim to function. */
-  std::vector<Node*> queue;  // MinHeap queue;
-  for (auto u : nodes_)
-    queue.push_back(u);
+  MinHeap queue{nodes_};
 
   while (!queue.empty()) {
-    std::sort(queue.begin(), queue.end(), [](Node* a, Node* b) {
-      return a->key > b->key;
-    });  // queue.restructure();
-    auto u = queue.back();
-    queue.pop_back();  // auto u = queue.extract_smallest();
+    auto u = queue.extract();
     for (auto [v, w] : u->adjacent) {
-      // if (queue.contains(v) && w < v->key)
-      if ((std::find(queue.begin(), queue.end(), v) != queue.end()) &&
-          w < v->key) {
+      if (queue.contains(v) && w < v->key) {
         v->parent = u;
         v->key = w;
       }

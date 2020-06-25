@@ -17,12 +17,11 @@ SCENARIO("min-heap", "[heap]") {
     n->key = std::rand() % 20;
     nodes.push_back(n);
   }
+
   MinHeap h2{nodes};
-  REQUIRE(h2.valid());
 
   for (std::size_t i = 0; i < 100; ++i) {
     h2.extract();
-    REQUIRE(h2.valid());
   }
 }
 /**
