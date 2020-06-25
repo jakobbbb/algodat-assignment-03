@@ -42,55 +42,85 @@ std::ostream& operator<<(std::ostream& os, Node const& n) {
 
 /* MINHEAP */
 
-void MinHeap::build(std::vector<Node*> const& nodes) {
-  size_ = nodes.size();
-  for (int i = size_ / 2; i >= 1; --i) {
+int parent(int i) {
+  return i / 2;  // floor is implicit
+}
+
+int left(int i) {
+  return 2 * i;
+}
+
+int right(int i) {
+  return (2 * i) + 1;
+}
+
+MinHeap::MinHeap(std::vector<Node*> const& nodes) : nodes_{nodes} {
+  // build-min-heap
+  for (int i = size() / 2; i >= 1; --i) {
+    std::cout << "i=" << i << "\n";
+    heapify(i - 1);
   }
-  // TODO
   assert(valid());
 }
 
-void MinHeap::heapify(MinHeapNode* n) {
-  auto l = n->left;
-  auto r = n->right;
-  auto smallest = n;
-  if (l->key <= size_ && l->key < n->key)
+int MinHeap::key(int i) {
+  std::cout << "key for i=" << i << ", size is " << size() << "\n";
+  assert(i < size());
+  return nodes_[i]->key;
+}
+
+void MinHeap::heapify(int i) {
+  auto l = left(i);
+  auto r = right(i);
+  auto smallest = i;
+  if (l < size() && key(l) < key(i))
     smallest = l;
-  if (r->key <= size_ && r->key < smallest->key)
+  if (r < size() && key(r) < key(smallest))
     smallest = r;
-  if (smallest != n) {
-    exchange(n, smallest);
+  if (smallest != i) {
+    swap(i, smallest);
     heapify(smallest);
   }
 }
 
-void MinHeap::exchange(MinHeapNode* a, MinHeapNode* b) {
-  std::swap(a->node, b->node);
-  std::swap(a->key, b->key);
+void MinHeap::swap(int a, int b) {
+  auto tmp = nodes_[a];
+  nodes_[a] = nodes_[b];
+  nodes_[b] = tmp;
 }
 
-Node* MinHeap::extract_smallest() {
+Node* MinHeap::extract() {
   if (empty())
     return nullptr;
-  auto smallest = root_->node;
-  // TODO
+  auto smallest = nodes_.front();
   throw "TODO";
   assert(valid());
   return smallest;
 }
 
 bool MinHeap::contains(Node* n) const {
-  // TODO
-  return false;
+  if (empty())
+    return false;
+  return std::find(nodes_.begin(), nodes_.end(), n) != nodes_.end();
+}
+
+std::size_t MinHeap::size() const {
+  return nodes_.size();
 }
 
 bool MinHeap::empty() const {
-  return 0 == size_;
+  return 0 == size();
 }
 
 bool MinHeap::valid() const {
-  // TODO
-  return false;
+  if (nodes_.size() <= 2)
+    return true;
+  for (std::vector<Node*>::size_type i = 1; i < nodes_.size(); ++i) {
+    if (nodes_[parent(i)]->key > nodes_[i]->key) {
+      return false;
+    }
+  }
+  return true;
 }
 
 /* GRAPH */

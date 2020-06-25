@@ -4,6 +4,27 @@
 #include <vector>
 #include "graph.hpp"
 
+SCENARIO("min-heap", "[heap]") {
+  std::srand(0);
+
+  MinHeap h;
+  REQUIRE(h.empty());
+  REQUIRE(0 == h.size());
+
+  std::vector<Node*> nodes;
+  for (std::size_t i = 0; i < 100; ++i) {
+    auto n = new Node{"n" + std::to_string(i)};
+    n->key = std::rand() % 20;
+    nodes.push_back(n);
+  }
+  MinHeap h2{nodes};
+  REQUIRE(h2.valid());
+
+  for (std::size_t i = 0; i < 100; ++i) {
+    h2.extract();
+    REQUIRE(h2.valid());
+  }
+}
 /**
  * Helper function to generate a graph of size `n_elements`, where each pair of
  * elements has a chance `p` of being connected with a random weight between 1

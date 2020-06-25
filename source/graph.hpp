@@ -47,43 +47,38 @@ struct Node {
 
 std::ostream& operator<<(std::ostream& os, Node const& n);
 
-struct MinHeapNode {
-  Node* node;
-  MinHeapNode* parent;
-  MinHeapNode* left;
-  MinHeapNode* right;
-  int key;
-};
-
 /**
  * Binary min heap for use in Prim algorithm.
  */
 class MinHeap {
  private:
-  MinHeapNode* root_;
-  std::size_t size_;
+  std::vector<Node*> nodes_;
+
+  /**
+   * Get the key of the node at index i.
+   */
+  int key(int i);
 
  public:
-  /**
-   * Initialize the min heap.
-   */
-  void build(std::vector<Node*> const& nodes);
+
+  MinHeap() = default;
+  MinHeap(std::vector<Node*> const& nodes);
 
   /**
    * Restore min-heap property
    */
-  void heapify(MinHeapNode* n);
-
-  /**
-   * Exchange/swap two nodes.
-   */
-  void exchange(MinHeapNode* a, MinHeapNode* b);
+  void heapify(int i);
 
   /**
    * Extract the smallest element, i. e. retrieve and remove it while keeping
    * the min heap intact.
    */
-  Node* extract_smallest();
+  Node* extract();
+
+  /**
+   * Swap elements at indices a and b.
+   */
+  void swap(int a, int b);
 
   /**
    * True iff n is contained in the heap.
