@@ -163,7 +163,6 @@ void Graph::remove(Node* n) {
   }
 }
 
-
 void Graph::prim() {
   // prepare graph
   auto root = nodes_.front();
