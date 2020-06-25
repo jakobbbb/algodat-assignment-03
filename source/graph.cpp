@@ -8,12 +8,6 @@
 
 Node::Node(std::string label) : label{label} {}
 
-Node::~Node() {}  // TODO?
-
-bool Node::operator==(Node const& rhs) const {
-  return label == rhs.label;  // TODO is this enough?
-}
-
 void Node::connect(Node* rhs, int weight) {
   assert(INFTY > weight);
   adjacent.insert(std::make_pair(rhs, weight));
@@ -137,16 +131,21 @@ void Graph::prim() {
     u->parent = nullptr;
   }
 
-  std::vector<Node*> queue;  // "queue"
+  /* Had some trouble creating the MinHeap, so we're substituting it with a
+   * simple array of nodes that gets sorted.  This, of course, drags efficiency
+   * down, but allows Prim to function. */
+  std::vector<Node*> queue;  // MinHeap queue;
   for (auto u : nodes_)
     queue.push_back(u);
 
   while (!queue.empty()) {
-    std::sort(queue.begin(), queue.end(),
-              [](Node* a, Node* b) { return a->key > b->key; });
+    std::sort(queue.begin(), queue.end(), [](Node* a, Node* b) {
+      return a->key > b->key;
+    });  // queue.restructure();
     auto u = queue.back();
-    queue.pop_back();
+    queue.pop_back();  // auto u = queue.extract_smallest();
     for (auto [v, w] : u->adjacent) {
+      // if (queue.contains(v) && w < v->key)
       if ((std::find(queue.begin(), queue.end(), v) != queue.end()) &&
           w < v->key) {
         v->parent = u;
@@ -157,14 +156,14 @@ void Graph::prim() {
 }
 
 bool Graph::bellmann_ford(Node* s) {
-  // setup
+  // setup nodes
   for (auto& u : nodes_) {
     u->key = INFTY;
     u->parent = nullptr;
   }
   s->key = 0;
 
-  // attempt to relaxe all edges nodes_.size()-1 times
+  // attempt to relax all edges nodes_.size()-1 times
   for (std::size_t i = 1; i < nodes_.size(); ++i) {
     for (auto& u : nodes_) {
       for (auto [v, w] : u->adjacent) {
@@ -184,7 +183,7 @@ bool Graph::bellmann_ford(Node* s) {
 }
 
 void Graph::relax(Node* u, Node* v, int w) {
-  if (v->key > (w + u->key)) {
+  if (v->key > (w + u->key)) {  // there is a better way of reaching v
     v->parent = u;
     v->key = w + u->key;
   }

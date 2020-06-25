@@ -20,9 +20,6 @@ struct Node {
   std::map<Node*, int> adjacent;  // ptr to adjacent node -> weight
 
   Node(std::string label);
-  ~Node();
-
-  bool operator==(Node const& rhs) const;
 
   /**
    * Used in Prim and Bellman–Ford.
