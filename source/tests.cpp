@@ -10,6 +10,7 @@ SCENARIO("min-heap", "[heap]") {
   MinHeap h;
   REQUIRE(h.empty());
   REQUIRE(0 == h.size());
+  REQUIRE(h.valid());
 
   std::vector<Node*> nodes;
   for (std::size_t i = 0; i < 100; ++i) {
@@ -19,6 +20,7 @@ SCENARIO("min-heap", "[heap]") {
   }
 
   MinHeap h2{nodes};
+  REQUIRE(h2.valid());
 
   for (std::size_t i = 0; i < 100; ++i) {
     h2.extract();
@@ -82,12 +84,6 @@ SCENARIO("print a graph", "[graph]") {
     auto g = make_graph(false, size, 15, 0.01f).first;
     REQUIRE(size == g->size());
     REQUIRE_NOTHROW(g->print(std::cout));
-  }
-
-  GIVEN("an empty digraph") {
-    Graph g{true};
-    REQUIRE_NOTHROW(g.print(std::cout));
-    // TODO
   }
 }
 

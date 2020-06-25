@@ -11,7 +11,6 @@
 // YOU CAN USE ONLY THE VECTORS, STRINGS AND MAPS FOR THIS ASSIGNMENT!
 
 struct Node;
-struct MinHeapNode;
 class MinHeap;
 class Graph;
 
@@ -103,6 +102,11 @@ class MinHeap {
    * Number of elements in the heap.
    */
   std::size_t size() const;
+
+  /**
+   * (for testing)  True iff the heap satisfied the min-heap property.
+   */
+  bool valid() const;
 };
 
 class Graph {
@@ -113,8 +117,6 @@ class Graph {
  public:
   Graph(bool directed);
   ~Graph();
-
-  // TODO: implement additional constructors
 
   /**
    * Add a node to the graph.
@@ -129,6 +131,8 @@ class Graph {
 
   /**
    * Prim algorithm.
+   * Finds a Minimum Spanning Tree.
+   * (see README for example output and further explanation)
    */
   void prim();
 
@@ -137,12 +141,16 @@ class Graph {
    * s: chosen source
    * Returns false if no answer could be found, e. g. due to the graph being
    * cyclic.
+   * Finds the shortest paths from `s` to all other nodes.
+   * (see README for example output and further explanation)
    */
   bool bellmann_ford(Node* s);
   void relax(Node* u, Node* v, int w);
 
-  // TODO: implement printGraph function that generates a file written using the
-  // dot format
+  /**
+   * Print the graph in `dot` format, highlighting edges that are part of
+   * MST/single-source shortest paths.
+   */
   void print(std::ostream& os) const;
 
   std::size_t size() const;

@@ -54,9 +54,12 @@ int right(int i) {
   return (2 * i) + 1;
 }
 
-MinHeap::MinHeap(std::vector<Node*> const& nodes) {
-  for (auto& n : nodes)
-    insert(n);
+MinHeap::MinHeap(std::vector<Node*> const& nodes) : nodes_{nodes} {
+  for (int i = size() / 2; i <= 1; --i)
+    heapify(i - 1);
+  // Alternative, doesn't work either tho:
+  // for (auto& n : nodes)
+  //  insert(n);
 }
 
 void MinHeap::decrease_key(int i, int key) {
@@ -123,6 +126,17 @@ bool MinHeap::empty() const {
   return 0 == size();
 }
 
+bool MinHeap::valid() const {
+  if (nodes_.size() <= 2)
+    return true;
+  for (std::vector<Node*>::size_type i = 1; i < nodes_.size(); ++i) {
+    if (nodes_[parent(i)]->key > nodes_[i]->key) {
+      return false;
+    }
+  }
+  return true;
+}
+
 /* GRAPH */
 
 Graph::Graph(bool directed) : directed_(directed) {}
@@ -149,6 +163,7 @@ void Graph::remove(Node* n) {
   }
 }
 
+
 void Graph::prim() {
   // prepare graph
   auto root = nodes_.front();
@@ -158,12 +173,27 @@ void Graph::prim() {
     u->parent = nullptr;
   }
 
-  MinHeap queue{nodes_};
+  /* NOTE:  Had some trouble getting MinHeap to behave correctly, so we're
+   * substituting it with a simple array of nodes that gets sorted.  This, of
+   * course, drags efficiency down, but allows Prim to function.  The following
+   * comments indicate how the MinHeap interface could be used, but this
+   * produces incomplite MSTs. */
+
+  // MinHeap queue{nodes};
+  std::vector<Node*> queue;
+  for (auto u : nodes_)
+    queue.push_back(u);
 
   while (!queue.empty()) {
-    auto u = queue.extract();
+    std::sort(queue.begin(), queue.end(), [](Node* a, Node* b) {
+      return a->key > b->key;
+    });  // queue.restructure();
+    auto u = queue.back();
+    queue.pop_back();  // auto u = queue.extract();
     for (auto [v, w] : u->adjacent) {
-      if (queue.contains(v) && w < v->key) {
+      // if (queue.contains(v) && w < v->key)
+      if ((std::find(queue.begin(), queue.end(), v) != queue.end()) &&
+          w < v->key) {
         v->parent = u;
         v->key = w;
       }
