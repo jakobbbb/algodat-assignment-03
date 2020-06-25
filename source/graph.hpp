@@ -32,7 +32,6 @@ struct Node {
    */
   int key = INFTY;
 
-
   /**
    * Add a connection between this node and another.
    */

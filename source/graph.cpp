@@ -23,13 +23,10 @@ void Node::print(std::ostream& os, bool directed) const {
   for (auto [other, weight] : adjacent) {
     std::string color = (other->parent == this) ? "blue" : "black";
     os << "  "  // indent
-       << "\"" << *this << "\" "
-       << sep
-       << " \"" << *other << "\" "
+       << "\"" << *this << "\" " << sep << " \"" << *other << "\" "
        << "["
        << "label=" << weight << ", "
-       << "color=" << color
-       << "];\n";
+       << "color=" << color << "];\n";
   }
 }
 
@@ -47,7 +44,7 @@ std::ostream& operator<<(std::ostream& os, Node const& n) {
 
 void MinHeap::build(std::vector<Node*> const& nodes) {
   size_ = nodes.size();
-  for (int i = size_/2; i >= 1; --i) {
+  for (int i = size_ / 2; i >= 1; --i) {
   }
   // TODO
   assert(valid());
@@ -60,7 +57,7 @@ void MinHeap::heapify(MinHeapNode* n) {
   if (l->key <= size_ && l->key < n->key)
     smallest = l;
   if (r->key <= size_ && r->key < smallest->key)
-    smallest =r;
+    smallest = r;
   if (smallest != n) {
     exchange(n, smallest);
     heapify(smallest);
