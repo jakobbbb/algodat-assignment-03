@@ -29,3 +29,10 @@ Blue vertices are part of the shortest paths.  The number below each
 node's label is the distance of the shortest path from _a_ to that node.
 E.g., the shortest path from _a_ to _c_ is via _e_ and has a cost of
 `7 + 4 = 12`.
+
+## Prim
+
+Prim finds the minimum spanning tree, i. e. a tree connecting all nodes
+such that the sum of weights within the tree is minimal.
+
+![example graph](doc/prim.svg)
