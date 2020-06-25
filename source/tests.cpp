@@ -115,8 +115,8 @@ SCENARIO("bellman-ford", "[bellman]") {
 }
 
 SCENARIO("prim", "[prim]") {
-  GIVEN("the digraph presented in the exercise") {
-    Graph g{true};
+  GIVEN("the graph presented in the exercise") {
+    Graph g{false};
 
     auto a = g.add({"a"});
     auto b = g.add({"b"});
@@ -130,7 +130,6 @@ SCENARIO("prim", "[prim]") {
     b->connect(a, 1);
     b->connect(c, 3);
     c->connect(d, 9);
-    d->connect(c, 3);
     d->connect(e, 2);
     d->connect(f, 1);
     e->connect(b, 2);
@@ -139,17 +138,17 @@ SCENARIO("prim", "[prim]") {
     REQUIRE_NOTHROW(g.prim());
   }
 
-  GIVEN("a digraph") {
+  GIVEN("a graph") {
     const int size = 20;
-    auto [g, nodes] = make_graph(true, size, 15, 0.1f);
+    auto [g, nodes] = make_graph(false, size, 15, 0.1f);
     REQUIRE(size == g->size());
     REQUIRE_NOTHROW(g->prim());
     REQUIRE_NOTHROW(g->print(std::cout));
   }
 
-  GIVEN("a large digraph") {
+  GIVEN("a large graph") {
     const int size = 200;
-    auto [g, nodes] = make_graph(true, size, 15, 0.1f);
+    auto [g, nodes] = make_graph(false, size, 15, 0.1f);
     REQUIRE_NOTHROW(g->prim());
     REQUIRE_NOTHROW(g->print(std::cout));
   }

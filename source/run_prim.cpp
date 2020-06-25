@@ -3,7 +3,7 @@
 
 
 int main() {
-  Graph g{true};
+  Graph g{false};
 
   auto a = g.add({"a"});
   auto b = g.add({"b"});
@@ -20,7 +20,6 @@ int main() {
 
   c->connect(d, 9);
 
-  d->connect(c, 3);
   d->connect(e, 2);
   d->connect(f, 1);
 

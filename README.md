@@ -35,4 +35,4 @@ E.g., the shortest path from _a_ to _c_ is via _e_ and has a cost of
 Prim finds the minimum spanning tree, i. e. a tree connecting all nodes
 such that the sum of weights within the tree is minimal.
 
-![example graph](doc/prim.svg)
+![example graph](doc/prim.svg#)
