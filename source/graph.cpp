@@ -91,9 +91,11 @@ void MinHeap::swap(int a, int b) {
 
 Node* MinHeap::extract() {
   if (empty())
-    return nullptr;
+    throw "Cannot extract from empty heap!";
   auto smallest = nodes_.front();
-  throw "TODO";
+  swap(0, size() - 1);
+  nodes_.pop_back();
+  heapify(0);
   assert(valid());
   return smallest;
 }
